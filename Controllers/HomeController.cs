@@ -18,33 +18,6 @@ namespace MedRoute.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //Add
-            var returnMessage = await _roleRepository.CreateAsync(new Role
-            {
-                RoleName = "New role"
-            });
-
-            var roleObj = (Role)returnMessage.Data;
-
-            //Update
-            await _roleRepository.UpdateAsync(new Role
-            {
-                RoleId = roleObj.RoleId,
-                RoleName = roleObj.RoleName + "1"
-            });
-
-            //Get
-            var a = await _roleRepository.GetAllAsync();
-
-            //GetById
-            var b = await _roleRepository.GetByIdAsync(roleObj.RoleId);
-
-            //GetByCondition
-            var c = await _roleRepository.GetByConditionsAsync(e => e.RoleName.Contains("1"));
-
-            //Delete
-            await _roleRepository.DeleteAsync(roleObj.RoleId);
-
             return View();
         }
 

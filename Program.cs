@@ -2,6 +2,7 @@ using MedRoute.Database;
 using MedRoute.Models.System;
 using MedRoute.Repository;
 using MedRoute.Repository.Implement;
+using MedRoute.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,27 +37,22 @@ services.AddDbContext<AppDBContext>(options =>
 
 //Add services
 services.AddScoped<IRoleRepository, RoleRepository>();
+services.AddSingleton<IHashPassword, HashPassword>();
+services.AddScoped<IAuthenticateService, UserRepository>();
 
 //Setting Authentication
 services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = "User_Scheme";
-    options.DefaultScheme = "User_Scheme";
+    options.DefaultAuthenticateScheme = "Scheme";
+    options.DefaultScheme = "Scheme";
 })
-.AddCookie("User_Scheme", options =>
+.AddCookie("Scheme", options =>
 {
     options.LoginPath = "/auth/login";
     options.AccessDeniedPath = "/";
     options.ExpireTimeSpan = TimeSpan.FromDays(7);
     options.Cookie.MaxAge = options.ExpireTimeSpan;
     options.SlidingExpiration = true;
-})
-.AddCookie("Admin_Scheme", options =>
-{
-    options.LoginPath = "/admin/auth/login";
-    options.AccessDeniedPath = "/admin/";
-    options.ExpireTimeSpan = TimeSpan.FromDays(1);
-    options.Cookie.MaxAge = options.ExpireTimeSpan;
 });
 
 // Add services to the container.
