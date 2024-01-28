@@ -40,6 +40,7 @@ services.AddScoped<IBookingRepository, BookingRepository>();
 services.AddScoped<IRoleRepository, RoleRepository>();
 services.AddSingleton<IHashPassword, HashPassword>();
 services.AddScoped<IAuthenticateService, UserRepository>();
+services.AddScoped<IUserRepository, UserRepository>();
 
 //Setting Authentication
 services.AddAuthentication(options =>

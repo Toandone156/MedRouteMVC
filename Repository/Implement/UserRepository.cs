@@ -197,7 +197,7 @@ namespace MedRoute.Repository.Implement
                 HashPassword = _hash.GetHashPassword(register.Password),
                 FullName = register.FullName,
                 Email = register.Email,
-                RoleId = register.RoleId ?? 1,
+                RoleId = register.RoleId ?? 2,
                 UserId = 0 //New user
             };
 
@@ -235,7 +235,6 @@ namespace MedRoute.Repository.Implement
                 currentEntity.Email = entity.Email;
                 currentEntity.DateOfBirth = entity.DateOfBirth;
                 currentEntity.Gender = entity.Gender;
-                currentEntity.Job = entity.Job;
                 currentEntity.PhoneNumber = entity.PhoneNumber;
                 currentEntity.Nation = entity.Nation;
                 await _context.SaveChangesAsync();

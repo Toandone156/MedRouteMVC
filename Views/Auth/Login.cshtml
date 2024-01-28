@@ -1,0 +1,130 @@
+﻿@model MedRoute.Models.Login
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- Basic -->
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<!-- Mobile Metas -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<!-- Site Metas -->
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<link rel="shortcut icon" href="~/images/favicon.png" type="">
+
+	<title> MedRoute </title>
+
+	<!-- bootstrap core css -->
+	<link rel="stylesheet" type="text/css" href="~/css/bootstrap.css" />
+
+	<!-- fonts style -->
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+	<!--owl slider stylesheet -->
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+
+	<!-- font awesome style -->
+	<link href="~/css/font-awesome.min.css" rel="stylesheet" />
+
+	<!-- Custom styles for this template -->
+	<link href="~/css/style.css" rel="stylesheet" />
+	<!-- responsive style -->
+	<link href="~/css/responsive.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+
+</head>
+<body>
+	<div class="hero_area">
+		<div class="hero_bg_box">
+			<img src="~/images/hero-bg.png" alt="">
+		</div>
+		<!-- header section strats -->
+		<header class="header_section">
+			<div class="container">
+				<nav class="navbar navbar-expand-lg custom_nav-container ">
+					<a class="navbar-brand" href="index.html">
+						<span>
+							MedRoute
+						</span>
+					</a>
+
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class=""> </span>
+					</button>
+
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav">
+							<li class="nav-item active">
+								<a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="about.html"> About</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="departments.html">Departments</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="doctors.html">Doctors</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="contact.html">Contact Us</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="login.html">LOGIN</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</header>
+	</div>
+	<div class="container d-flex justify-content-center">
+		<div class="d-flex justify-content-center h-100 form-login">
+			<div class="user_card">
+				<div class="d-flex justify-content-center">
+					<div class="brand_logo_container">
+						<img src="~/images/img-login.png" class="brand_logo" alt="Logo">
+					</div>
+				</div>
+				<div class="d-flex justify-content-center form_container">
+					<form asp-controller="Auth" asp-action="Login" method="post">
+						<div class="input-group mb-3">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-user"></i></span>
+							</div>
+							<input asp-for="Username" type="text" class="form-control input_user" placeholder="Email hoặc số điện thoại">
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-key"></i></span>
+							</div>
+							<input asp-for="Password" type="password" class="form-control input_pass" placeholder="Mật khẩu">
+						</div>
+						<div class="d-flex justify-content-center mt-3 login_container">
+							<button type="submit" name="button" class="btn login_btn">Đăng nhập</button>
+						</div>
+					</form>
+				</div>
+
+				<div class="mt-4">
+					<div class="d-flex justify-content-center links">
+						Chưa có tài khoản? <a asp-controller="Auth" asp-action="Register" class="ml-2">Đăng ký</a>
+					</div>
+					@* <div class="d-flex justify-content-center links">
+						<a href="forgetPass.html">Quên mật khẩu?</a>
+					</div> *@
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

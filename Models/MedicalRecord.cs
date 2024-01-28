@@ -18,7 +18,6 @@ namespace MedRoute.Models
         //ForeignKey
         public int? PatientId { get; set; }
         public int? ServeUserId { get; set; }
-        public int ServeStatusId { get; set; }
         public int BookingId { get; set; }
 
         //Relations
@@ -26,8 +25,6 @@ namespace MedRoute.Models
         public virtual User? Patient { get; set; }
         [ForeignKey("ServeUserId")]
         public virtual User? ServeUser { get; set; }
-        [ForeignKey("ServeStatusId")]
-        public virtual ServeStatus? ServeStatus { get; set; }
         [ForeignKey("BookingId")]
         public virtual Booking? Booking { get; set; }
     }

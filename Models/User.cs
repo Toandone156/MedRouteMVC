@@ -18,13 +18,14 @@ namespace MedRoute.Models
         [DisplayName("Full name")]
         public string FullName { get; set; }
         [StringLength(12)]
-        public string CitizenIdentificationCardNumber { get; set; }
+        public string? CitizenIdentificationCardNumber { get; set; }
+		[StringLength(16)]
+		public string? InsuranceCode { get; set; }
         public string Email { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public bool Gender { get; set; }
-        public string Job { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Nation { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public bool? Gender { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string Nation { get; set; } = "Viet nam";
 
         //ForeignKey
         public int RoleId { get; set; }

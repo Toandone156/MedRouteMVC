@@ -167,7 +167,6 @@ namespace MedRoute.Repository.Implement
                 currentEntity.BookingOrder = entity.BookingOrder;
                 currentEntity.PatientId = entity.PatientId;
                 currentEntity.ServeUserId = entity.ServeUserId;
-                currentEntity.ServeStatusId = entity.ServeStatusId;
                 currentEntity.BookingId = entity.BookingId;
                 await _context.SaveChangesAsync();
 

@@ -13,7 +13,6 @@ namespace MedRoute.Database
         public DbSet<User> Users { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<MedicalRecord> MedicalRecords { get; set; }
-        public DbSet<ServeStatus> ServeStatuses { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

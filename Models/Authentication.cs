@@ -20,7 +20,6 @@ namespace MedRoute.Models
     {
         [Required]
         [StringLength(100)]
-        [RegularExpression("^(?!.*\\.\\.)(?!.*\\.$)[^\\W][\\w.]{0,29}$", ErrorMessage = "Username is not valid")]
         [Remote("ValidateExistUsername", "Auth")]
         public string Username { get; set; }
         [Required]
@@ -37,7 +36,7 @@ namespace MedRoute.Models
 		public string FullName { get; set; }
         [DataType(DataType.EmailAddress)]
         [Remote("ValidateExistEmail", "Auth")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
         [DisplayName("Role")]
         public int? RoleId { get; set; }
     }

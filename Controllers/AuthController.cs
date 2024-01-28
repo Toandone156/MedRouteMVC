@@ -59,11 +59,14 @@ namespace MedRoute.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("Username,Password,AgainPassword,FullName,Email")]
+        public async Task<IActionResult> Register([Bind("Username,Password,AgainPassword,FullName")]
                                 Register register)
-        {
-            if (ModelState.IsValid)
+		{
+			register.Email = register.Username;
+
+			if (ModelState.IsValid)
             {
+
                 var checkStatus = await _authenticateService.CheckEmailAndUsernameAsync(register.Email, register.Username);
 
                 if ((bool)checkStatus.Data)
@@ -71,7 +74,7 @@ namespace MedRoute.Controllers
                     return View();
                 }
 
-                _authenticateService.RegisterAsync(register);
+                await _authenticateService.RegisterAsync(register);
 
                 return RedirectToAction("Login");
             }
