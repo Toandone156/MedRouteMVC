@@ -9,6 +9,7 @@ namespace MedRoute.Repository.Implement
     public class BookingRepository : IBookingRepository
     {
         private readonly AppDBContext _context;
+
         public BookingRepository(AppDBContext context)
         {
             this._context = context;
@@ -85,6 +86,7 @@ namespace MedRoute.Repository.Implement
         {
             try
             {
+                var books= _context.Bookings.ToList();
                 return new StatusMessage
                 {
                     IsSuccess = true,
