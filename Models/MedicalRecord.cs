@@ -12,6 +12,8 @@ namespace MedRoute.Models
         [Column(TypeName = "text")]
         public string MedicalResult { get; set; }
         public int BookingOrder { get; set; }
+        [StringLength(10)]
+        public string Status { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
 

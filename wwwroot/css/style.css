@@ -963,7 +963,7 @@ a:focus {
   border: 1px solid #ccc;
 }
 .form_container .contact-form{
-  margin-top: 100px;
+  margin-top: 0px;
 }
 .modal h2{
   text-align: center;

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedRoute.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20240127101054_Initial")]
+    [Migration("20240128145515_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,19 +74,19 @@ namespace MedRoute.Migrations
                     b.Property<int?>("PatientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ServeStatusId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ServeUserId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("MedicalRecordId");
 
                     b.HasIndex("BookingId");
 
                     b.HasIndex("PatientId");
-
-                    b.HasIndex("ServeStatusId");
 
                     b.HasIndex("ServeUserId");
 
@@ -110,23 +110,6 @@ namespace MedRoute.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("MedRoute.Models.ServeStatus", b =>
-                {
-                    b.Property<int>("ServeStatusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ServeStatusId"), 1L, 1);
-
-                    b.Property<string>("ServeStatusName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ServeStatusId");
-
-                    b.ToTable("ServeStatuses");
-                });
-
             modelBuilder.Entity("MedRoute.Models.User", b =>
                 {
                     b.Property<int>("UserId")
@@ -136,11 +119,10 @@ namespace MedRoute.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
 
                     b.Property<string>("CitizenIdentificationCardNumber")
-                        .IsRequired()
                         .HasMaxLength(12)
                         .HasColumnType("nvarchar(12)");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -151,22 +133,21 @@ namespace MedRoute.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<bool>("Gender")
+                    b.Property<bool?>("Gender")
                         .HasColumnType("bit");
 
                     b.Property<string>("HashPassword")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Job")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("InsuranceCode")
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("Nation")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RoleId")
@@ -196,12 +177,6 @@ namespace MedRoute.Migrations
                         .WithMany("PatientRecords")
                         .HasForeignKey("PatientId");
 
-                    b.HasOne("MedRoute.Models.ServeStatus", "ServeStatus")
-                        .WithMany("MedicalRecords")
-                        .HasForeignKey("ServeStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("MedRoute.Models.User", "ServeUser")
                         .WithMany("ServeRecords")
                         .HasForeignKey("ServeUserId");
@@ -209,8 +184,6 @@ namespace MedRoute.Migrations
                     b.Navigation("Booking");
 
                     b.Navigation("Patient");
-
-                    b.Navigation("ServeStatus");
 
                     b.Navigation("ServeUser");
                 });
@@ -234,11 +207,6 @@ namespace MedRoute.Migrations
             modelBuilder.Entity("MedRoute.Models.Role", b =>
                 {
                     b.Navigation("Accounts");
-                });
-
-            modelBuilder.Entity("MedRoute.Models.ServeStatus", b =>
-                {
-                    b.Navigation("MedicalRecords");
                 });
 
             modelBuilder.Entity("MedRoute.Models.User", b =>

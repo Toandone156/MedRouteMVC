@@ -37,6 +37,8 @@ services.AddDbContext<AppDBContext>(options =>
 
 //Add services
 services.AddScoped<IBookingRepository, BookingRepository>();
+services.AddScoped<IUserRepository, UserRepository>();
+services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
 services.AddScoped<IRoleRepository, RoleRepository>();
 services.AddSingleton<IHashPassword, HashPassword>();
 services.AddScoped<IAuthenticateService, UserRepository>();

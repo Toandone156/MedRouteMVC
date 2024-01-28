@@ -75,6 +75,11 @@ namespace MedRoute.Migrations
                     b.Property<int?>("ServeUserId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
                     b.HasKey("MedicalRecordId");
 
                     b.HasIndex("BookingId");

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MedRoute.Migrations
 {
-    public partial class Init : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,8 +15,8 @@ namespace MedRoute.Migrations
                 {
                     BookingId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BookingOrder = table.Column<int>(type: "int", nullable: false)
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,19 +37,6 @@ namespace MedRoute.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ServeStatus",
-                columns: table => new
-                {
-                    ServeStatusId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ServeStatusName = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ServeStatus", x => x.ServeStatusId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -58,14 +45,14 @@ namespace MedRoute.Migrations
                     UserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     HashPassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FullName = table.Column<string>(type: "nvarchar(100)", nullable: false),
-                    CitizenIdentificationCardNumber = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
+                    CitizenIdentificationCardNumber = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
+                    InsuranceCode = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Gender = table.Column<bool>(type: "bit", nullable: false),
-                    Job = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Gender = table.Column<bool>(type: "bit", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Nation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: true)
+                    RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,7 +61,8 @@ namespace MedRoute.Migrations
                         name: "FK_Users_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
-                        principalColumn: "RoleId");
+                        principalColumn: "RoleId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -83,13 +71,15 @@ namespace MedRoute.Migrations
                 {
                     MedicalRecordId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     MedicalDetail = table.Column<string>(type: "text", nullable: false),
                     MedicalResult = table.Column<string>(type: "text", nullable: false),
+                    BookingOrder = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PatientId = table.Column<int>(type: "int", nullable: true),
                     ServeUserId = table.Column<int>(type: "int", nullable: true),
-                    ServeStatusId = table.Column<int>(type: "int", nullable: true),
-                    BookingId = table.Column<int>(type: "int", nullable: true)
+                    BookingId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -98,12 +88,8 @@ namespace MedRoute.Migrations
                         name: "FK_MedicalRecords_Bookings_BookingId",
                         column: x => x.BookingId,
                         principalTable: "Bookings",
-                        principalColumn: "BookingId");
-                    table.ForeignKey(
-                        name: "FK_MedicalRecords_ServeStatus_ServeStatusId",
-                        column: x => x.ServeStatusId,
-                        principalTable: "ServeStatus",
-                        principalColumn: "ServeStatusId");
+                        principalColumn: "BookingId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MedicalRecords_Users_PatientId",
                         column: x => x.PatientId,
@@ -119,19 +105,12 @@ namespace MedRoute.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_MedicalRecords_BookingId",
                 table: "MedicalRecords",
-                column: "BookingId",
-                unique: true,
-                filter: "[BookingId] IS NOT NULL");
+                column: "BookingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MedicalRecords_PatientId",
                 table: "MedicalRecords",
                 column: "PatientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MedicalRecords_ServeStatusId",
-                table: "MedicalRecords",
-                column: "ServeStatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MedicalRecords_ServeUserId",
@@ -151,9 +130,6 @@ namespace MedRoute.Migrations
 
             migrationBuilder.DropTable(
                 name: "Bookings");
-
-            migrationBuilder.DropTable(
-                name: "ServeStatus");
 
             migrationBuilder.DropTable(
                 name: "Users");

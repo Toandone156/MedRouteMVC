@@ -1,9 +1,18 @@
-﻿@model MedRoute.Models.Booking;
+﻿@model MedRoute.Models.MedicalRecord;
 
 @{
     ViewData["Title"] = "Booking";
-
+    var myData = TempData["ErrMess"] as string;
+    var isSucces = TempData["isSucces"] as bool?;
+    
 }
+<script type="text/javascript">
+    if (@isSucces.HasValue && @isSucces) {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "block";
+    }
+</script>
+
 <!-- contact section -->
 <section id="labels">
     <div class="container">
@@ -38,21 +47,35 @@
                         <div class="container">
                             <div class="row">
                                 <div class="form_container contact-form">
-                                    <form action="#">
+                                    <form action="~/Booking/Book" method="post">
+                                        @* BookingId *@
+                                        <input style="display:none" name="BookingId" id="BookingId" type="text" value="@ViewBag.LatestBooking.BookingId" />
+                                        @* FullName *@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Họ tên
                                         </label>
-                                        <input type="text" placeholder="Enter full name" required="required" aria-required="true" />
-
+                                        <input name="FullName" id="FullName" type="text" placeholder="Enter full name" required="required" aria-required="true" />
+                                        @* DateOfBirth *@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Năm sinh
                                         </label>
-                                        <input type="date" placeholder="Enter birthday" required="required" aria-required="true" />
-
+                                        <input name="DateOfBirth" id="DateOfBirth" type="date" placeholder="Enter birthday" required="required" aria-required="true" />
+                                        @* Gender *@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Giới tính
                                         </label>
-                                        <input type="text" placeholder="Enter sex" required="required" aria-required="true" />
+                                        <div style="display:flex; justify-content: space-around;">
+                                            <div>
+                                                <label>Male</label>
+                                                <input type="radio" id="male" name="Gender" value="true" required>
+                                            </div>
+                                            <div>
+                                                <label>Female</label>
+                                                <input type="radio" id="female" name="Gender" value="false" required>
+                                            </div>
+                                            
+                                        </div>
+                                        
                                         <!-- <div class="elementor-field elementor-select-wrapper remove-before ">
                                                         <select name="form_fields[message]" id="form-field-message"
                                                             class="elementor-field-textual elementor-size-md" required="required"
@@ -61,27 +84,36 @@
                                                             <option value="Nữ" selected="selected">Nữ</option>
                                                         </select>
                                                     </div> -->
+                                        @* PhoneNumber *@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Số điện thoại
                                         </label>
-                                        <input type="text" placeholder="Enter phone number" required="required" aria-required="true" />
+                                        <input name="PhoneNumber" type="number" placeholder="Enter phone number" required="required" aria-required="true" />
+                                        @* Email *@
                                         <label for="form-field-name" class="elementor-field-label">
+                                            Địa chỉ Email
+                                        </label>
+                                        <input name="Email" type="text" placeholder="Enter Email" required="required" aria-required="true" />
+                                        @* UserID *@
+                                        @* <label for="form-field-name" class="elementor-field-label">
                                             Mã số bệnh nhân (nếu có)
                                         </label>
-                                        <input type="text" placeholder="Enter mscn" />
+                                        <input name="UserID" type="text" placeholder="Enter mscn" /> *@
+                                        @* InsuranceCode *@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Mã số BHYT (nếu có)
                                         </label>
-                                        <input type="text" placeholder="Enter BHYT" />
+                                        <input name="InsuranceCode" type="text" placeholder="Enter BHYT" />
+                                        @* MedicalDetail *@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Triệu chứng/Nhu cầu khám (Không bắt buộc)
                                         </label>
-                                        <textarea placeholder="Enter trieu chung" rows="5"></textarea>
-
+                                        <textarea name="MedicalDetail" placeholder="Enter trieu chung" rows="5"></textarea>
+                                        <button class="submit" type="submit">Đăng kí</button>
                                     </form>
-                                    <div class="submitButton">
-                                        <button class="submit">Đăng kí</button>
-                                    </div>
+                                    @* <div class="submitButton">
+                                    <button class="submit">Đăng kí</button>
+                                    </div> *@
                                     <div id="myModal" class="modal">
                                         <h4>Thông tin của bạn đã được gửi tới bác sĩ.</h4>
                                         <h4>Xin cảm ơn</h4>
