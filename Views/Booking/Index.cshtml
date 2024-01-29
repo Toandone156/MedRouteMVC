@@ -4,14 +4,15 @@
     ViewData["Title"] = "Booking";
     var myData = TempData["ErrMess"] as string;
     var isSucces = TempData["isSucces"] as bool?;
-    
+    var user = @ViewBag.User as User;
+    var medicalRecord = @ViewBag.MedicalRecord as MedicalRecord;
 }
-<script type="text/javascript">
+@* <script type="text/javascript">
     if (@isSucces.HasValue && @isSucces) {
         var modal = document.getElementById("myModal");
         modal.style.display = "block";
     }
-</script>
+</script> *@
 
 <!-- contact section -->
 <section id="labels">
@@ -40,26 +41,31 @@
                 </small>
             </div>
             <div class="coupon midnight-blue">
-                <a data-toggle="collapse" href="#code-2" class="open-code">Nhập thông tin</a>
+                <a data-toggle="collapse" href="#code-2" class="open-code">@((medicalRecord != null) ? $"Thông tin số {medicalRecord.BookingOrder}"  : "Nhập thông tin")</a>
                 <div id="code-2" class="collapse in code">
                     <!-- MNO123ST -->
                     <section id="bocso" class="doctor_section layout_padding contact_section layout_padding">
                         <div class="container">
                             <div class="row">
                                 <div class="form_container contact-form">
-                                    <form action="~/Booking/Book" method="post">
+                                    <form id="mainForm" action="~/Booking/@((user != null) ? "BookUser" : "BookGuest")" method="post">
                                         @* BookingId *@
                                         <input style="display:none" name="BookingId" id="BookingId" type="text" value="@ViewBag.LatestBooking.BookingId" />
                                         @* FullName *@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Họ tên
                                         </label>
-                                        <input name="FullName" id="FullName" type="text" placeholder="Enter full name" required="required" aria-required="true" />
+                                        <input name="FullName" id="FullName" type="text" placeholder="Enter full name" required="required" aria-required="true"
+                                               @*  @((user != null) ? "readonly" : "") *@
+                                               value="@((user != null) ? user.FullName : "")" />
                                         @* DateOfBirth *@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Năm sinh
                                         </label>
-                                        <input name="DateOfBirth" id="DateOfBirth" type="date" placeholder="Enter birthday" required="required" aria-required="true" />
+                                        <input name="DateOfBirth" id="DateOfBirth" type="date" placeholder="Enter birthday" required="required" aria-required="true"
+                                               value="@((user != null && user.DateOfBirth.HasValue) ? user.DateOfBirth.Value.ToString("yyyy-MM-dd") : "")" />
+
+
                                         @* Gender *@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Giới tính
@@ -67,11 +73,15 @@
                                         <div style="display:flex; justify-content: space-around;">
                                             <div>
                                                 <label>Male</label>
-                                                <input type="radio" id="male" name="Gender" value="true" required>
+                                                <input type="radio" id="male" name="Gender" value="true" required
+                                               @*  @((user != null) ? "readonly" : "") *@
+                                                    @(user != null && user.Gender.GetValueOrDefault() ? "checked" : "")>
                                             </div>
                                             <div>
                                                 <label>Female</label>
-                                                <input type="radio" id="female" name="Gender" value="false" required>
+                                                <input type="radio" id="female" name="Gender" value="false" required
+                                               @*  @((user != null) ? "readonly" : "") *@
+                                                    @(user != null && !user.Gender.GetValueOrDefault() ? "checked" : "")>
                                             </div>
                                             
                                         </div>
@@ -88,12 +98,16 @@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Số điện thoại
                                         </label>
-                                        <input name="PhoneNumber" type="number" placeholder="Enter phone number" required="required" aria-required="true" />
+                                        <input name="PhoneNumber" type="number" placeholder="Enter phone number" required="required" aria-required="true"
+                                                @* @((user != null) ? "readonly" : "") *@
+                                               value="@((user != null) ? user.PhoneNumber : "")" />
                                         @* Email *@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Địa chỉ Email
                                         </label>
-                                        <input name="Email" type="text" placeholder="Enter Email" required="required" aria-required="true" />
+                                        <input name="Email" type="text" placeholder="Enter Email" required="required" aria-required="true"
+                                                @* @((user != null) ? "readonly" : "") *@
+                                               value="@((user != null) ? user.Email : "")" />
                                         @* UserID *@
                                         @* <label for="form-field-name" class="elementor-field-label">
                                             Mã số bệnh nhân (nếu có)
@@ -103,13 +117,36 @@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Mã số BHYT (nếu có)
                                         </label>
-                                        <input name="InsuranceCode" type="text" placeholder="Enter BHYT" />
+                                        <input name="InsuranceCode" type="text" placeholder="Enter BHYT"
+                                               @*  @((user != null) ? "readonly" : "") *@
+                                               value="@((user != null) ? user.InsuranceCode : "")" />
                                         @* MedicalDetail *@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Triệu chứng/Nhu cầu khám (Không bắt buộc)
                                         </label>
-                                        <textarea name="MedicalDetail" placeholder="Enter trieu chung" rows="5"></textarea>
-                                        <button class="submit" type="submit">Đăng kí</button>
+                                        <textarea name="MedicalDetail" placeholder="Enter trieu chung" rows="5"
+                                                  >
+                                            @((medicalRecord != null) ? medicalRecord.MedicalDetail : "")
+                                              </textarea>
+                                        @* MedicalResult *@
+                                        <label for="form-field-name" class="elementor-field-label">
+                                            kết quả khám benh
+                                        </label>
+                                        <textarea name="MedicalResult" readonly rows="5"
+                                                  >
+                                            @((medicalRecord != null) ? medicalRecord.MedicalResult : "")
+                                              </textarea>
+                                        
+                                        <button class="submit" type="submit">
+                                            @((medicalRecord != null) ? "Cập nhât thông tin " : "Đăng kí")</button>
+
+                                        @if (medicalRecord != null)
+                                        {
+                                            <button class="submit" onclick="submitFormCancel()">
+                                                Hủy
+                                            </button>
+                                        }
+
                                     </form>
                                     @* <div class="submitButton">
                                     <button class="submit">Đăng kí</button>
@@ -130,5 +167,12 @@
             </div>
         </div>
     </div>
+    <script>
+        function submitFormCancel() {
+            var form = document.getElementById('mainForm');
+            form.action = "Booking/Cancel";
+            form.submit();
+        }
+    </script>
 </section>
 <!-- end contact section -->
