@@ -83,8 +83,13 @@
                             </form> -->
                             @if (IsLogin)
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link">Welcome, @User.Identity.Name</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Welcome, @User.Identity.Name
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" asp-controller="Auth" asp-action="Logout">Logout</a>
+                                    </div>
                                 </li>
                             }
                             else

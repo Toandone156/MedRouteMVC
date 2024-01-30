@@ -7,12 +7,6 @@
     var user = @ViewBag.User as User;
     var medicalRecord = @ViewBag.MedicalRecord as MedicalRecord;
 }
-@* <script type="text/javascript">
-    if (@isSucces.HasValue && @isSucces) {
-        var modal = document.getElementById("myModal");
-        modal.style.display = "block";
-    }
-</script> *@
 
 <!-- contact section -->
 <section id="labels">
@@ -24,7 +18,7 @@
                 </h2>
             </div>
             <div class="discount emerald">
-                @ViewBag.LatestBooking.Order
+                @((medicalRecord != null) ? $"{medicalRecord.BookingOrder}" : "Chưa đăng ký số")
                 <div class="type">
                     Phòng siêu âm
                 </div>
@@ -47,7 +41,7 @@
                     <section id="bocso" class="doctor_section layout_padding contact_section layout_padding">
                         <div class="container">
                             <div class="row">
-                                <div class="form_container contact-form">
+                                <div class="form_container contact-form" style="margin-top: 0px;">
                                     <form id="mainForm" action="~/Booking/@((user != null) ? "BookUser" : "BookGuest")" method="post">
                                         @* BookingId *@
                                         <input style="display:none" name="BookingId" id="BookingId" type="text" value="@ViewBag.LatestBooking.BookingId" />
@@ -138,7 +132,7 @@
                                               </textarea>
                                         
                                         <button class="submit" type="submit">
-                                            @((medicalRecord != null) ? "Cập nhât thông tin " : "Đăng kí")</button>
+                                            @((medicalRecord != null) ? "Cập nhật thông tin " : "Đăng kí")</button>
 
                                         @if (medicalRecord != null)
                                         {
@@ -151,13 +145,6 @@
                                     @* <div class="submitButton">
                                     <button class="submit">Đăng kí</button>
                                     </div> *@
-                                    <div id="myModal" class="modal">
-                                        <h4>Thông tin của bạn đã được gửi tới bác sĩ.</h4>
-                                        <h4>Xin cảm ơn</h4>
-                                        <div class="BtnClose">
-                                            <button id="closeButton">Close</button>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -167,12 +154,31 @@
             </div>
         </div>
     </div>
+
+
+    <div id="myModal" class="modal">
+        <h4>Thông tin của bạn đã được gửi tới bác sĩ.</h4>
+        <h4>Xin cảm ơn</h4>
+        <div class="BtnClose">
+            <button id="closeButton">Close</button>
+        </div>
+    </div>
+
     <script>
+        function activeModal() {
+            if (@(isSucces.HasValue ? isSucces.ToString().ToLower() : "false")) {
+                var modal = document.getElementById("myModal");
+                modal.style.display = "block";
+            }
+        }
+
         function submitFormCancel() {
             var form = document.getElementById('mainForm');
             form.action = "Booking/Cancel";
             form.submit();
         }
+
+        activeModal();
     </script>
 </section>
 <!-- end contact section -->

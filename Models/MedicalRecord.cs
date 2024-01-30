@@ -7,10 +7,10 @@ namespace MedRoute.Models
     {
         [Key]
         public int MedicalRecordId { get; set; }
-        [Column(TypeName = "text")]
-        public string MedicalDetail { get; set; }
-        [Column(TypeName = "text")]
-        public string MedicalResult { get; set; }
+        [Column(TypeName = "ntext")]
+        public string? MedicalDetail { get; set; }
+        [Column(TypeName = "ntext")]
+        public string? MedicalResult { get; set; }
         public int BookingOrder { get; set; }
         [StringLength(10)]
         public string Status { get; set; }

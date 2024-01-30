@@ -32,6 +32,37 @@ namespace MedRoute.Database
                 .HasOne(e => e.ServeUser)
                 .WithMany(e => e.ServeRecords);
 
+            modelBuilder
+                .Entity<Role>()
+                .HasData(
+                    new Role
+                    {
+                        RoleId = 1,
+                        RoleName = "Customer"
+                    },
+                    new Role
+                    {
+                        RoleId = 2,
+                        RoleName = "Doctor"
+                    },
+                    new Role
+                    {
+                        RoleId = 3,
+                        RoleName = "Nurse"
+                    }
+                );
+
+            modelBuilder
+                .Entity<Booking>()
+                .HasData(
+                    new Booking
+                    {
+                        BookingId = 1,
+                        Order = 0,
+                        Date = DateTime.Now
+                    }
+                );
+
             base.OnModelCreating(modelBuilder);
         }
     }

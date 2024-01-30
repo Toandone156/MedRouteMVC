@@ -4,6 +4,7 @@ using MedRoute.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedRoute.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240130082800_ChangeToNText")]
+    partial class ChangeToNText
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,14 +41,6 @@ namespace MedRoute.Migrations
                     b.HasKey("BookingId");
 
                     b.ToTable("Bookings");
-
-                    b.HasData(
-                        new
-                        {
-                            BookingId = 1,
-                            Date = new DateTime(2024, 1, 30, 15, 44, 39, 728, DateTimeKind.Local).AddTicks(7056),
-                            Order = 0
-                        });
                 });
 
             modelBuilder.Entity("MedRoute.Models.MedicalRecord", b =>
@@ -112,23 +106,6 @@ namespace MedRoute.Migrations
                     b.HasKey("RoleId");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            RoleId = 1,
-                            RoleName = "Customer"
-                        },
-                        new
-                        {
-                            RoleId = 2,
-                            RoleName = "Doctor"
-                        },
-                        new
-                        {
-                            RoleId = 3,
-                            RoleName = "Nurse"
-                        });
                 });
 
             modelBuilder.Entity("MedRoute.Models.User", b =>

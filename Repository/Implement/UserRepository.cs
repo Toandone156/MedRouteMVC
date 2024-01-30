@@ -197,7 +197,7 @@ namespace MedRoute.Repository.Implement
                 HashPassword = _hash.GetHashPassword(register.Password),
                 FullName = register.FullName,
                 Email = register.Email,
-                RoleId = register.RoleId ?? 2,
+                RoleId = register.RoleId ?? 1,
                 UserId = 0 //New user
             };
 
