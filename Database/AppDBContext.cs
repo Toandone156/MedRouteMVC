@@ -58,7 +58,7 @@ namespace MedRoute.Database
                     new Booking
                     {
                         BookingId = 1,
-                        Order = 0,
+                        Order = 1,
                         Date = DateTime.Now
                     }
                 );

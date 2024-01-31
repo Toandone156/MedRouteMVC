@@ -62,7 +62,7 @@ namespace MedRoute.Controllers
                     bookingRs = await ((BookingRepository)_bookingRepository).CreateAsync(new Booking
                     {
                         Date= DateTime.Parse(dateNow),
-                        Order = 0
+                        Order = 1
                     });;
                     if (bookingRs.IsSuccess)
                     {
