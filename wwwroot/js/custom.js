@@ -56,8 +56,16 @@ function myMap() {
 //     var modal = document.getElementById("myModal");
 //     modal.style.display = "block"; /* Show the modal */
 //   });
-  
-  document.getElementById("closeButton").addEventListener("click", function() {
-    var modal = document.getElementById("myModal");
-    modal.style.display = "none"; /* Hide the modal */
-  });
+
+// add event close button
+var closeButtonElements = document.getElementsByClassName("closeButton");
+
+for (var i = 0; i < closeButtonElements.length; i++) {
+    closeButtonElements[i].addEventListener("click", function () {
+        var modals = document.getElementsByClassName("modal");
+
+        for (var j = 0; j < modals.length; j++) {
+            modals[j].style.display = "none";
+        }
+    });
+}

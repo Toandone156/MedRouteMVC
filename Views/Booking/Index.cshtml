@@ -4,6 +4,7 @@
     ViewData["Title"] = "Booking";
     var myData = TempData["ErrMess"] as string;
     var isSucces = TempData["isSucces"] as bool?;
+    var booking = ViewBag.LatestBooking as Booking;
     var user = @ViewBag.User as User;
     var medicalRecord = @ViewBag.MedicalRecord as MedicalRecord;
 }
@@ -42,9 +43,9 @@
                         <div class="container">
                             <div class="row">
                                 <div class="form_container contact-form" style="margin-top: 0px;">
-                                    <form id="mainForm" action="~/Booking/@((user != null) ? "BookUser" : "BookGuest")" method="post">
+                                    <form id="mainForm" href="#mainForm" action="~/Booking/@((user != null) ? "BookUser" : "BookGuest" )" method="post">
                                         @* BookingId *@
-                                        <input style="display:none" name="BookingId" id="BookingId" type="text" value="@ViewBag.LatestBooking.BookingId" />
+                                        <input style="display:none" name="BookingId" id="BookingId" type="text" value="@ViewBag.LatestBooking?.BookingId" />
                                         @* FullName *@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Họ tên
@@ -155,24 +156,55 @@
         </div>
     </div>
 
+    <div id="askForBooking" class="modal">
+        <div class="title" style="height: 30%; background-color: #62d2a2">
+            <h4>Bạn có muốn bốc số luôn không?</h4>
+        </div>
+        <div class="container" style="height: 50%; align-items: center">
+            <h4>Chúng tôi sẽ bốc số thay cho bạn và bạn sẽ không cần phải tốn thời gian điền thông tin</h4>
+            <div>Số hiện tại: <strong>@booking.Order</strong></div>
+        </div>
+        <div style="height: 20%; display: flex; justify-content: space-around">
+            <div class="BtnOk">
+                <button onclick="bookRequestPost(@booking.BookingId)">Chấp Nhận</button>
+            </div>
+            <div class="BtnCancel" onclick="modalCancel(this)">
+                <button class="closeButton">Close</button>
+            </div>
+       </div>
+    </div>
 
     <div id="myModal" class="modal">
         <h4>Thông tin của bạn đã được gửi tới bác sĩ.</h4>
         <h4>Xin cảm ơn</h4>
         <div class="BtnClose">
-            <button id="closeButton">Close</button>
+            <button class="closeButton">Close</button>
         </div>
     </div>
 
     <script>
+        
+        
+        
+
+
+        // auto load
+        document.addEventListener('DOMContentLoaded', function () {
+            // display asking modal
+            askForBookingModal(@medicalRecord);
+        });
+
+        // display message
         function activeModal() {
             if (@(isSucces.HasValue ? isSucces.ToString().ToLower() : "false")) {
                 var modal = document.getElementById("myModal");
                 modal.style.display = "block";
             }
         }
-
+        // cancel bookng
         function submitFormCancel() {
+            if(!confirm("Bạn có xác nhận hủy số thứ tự không "))
+                return
             var form = document.getElementById('mainForm');
             form.action = "Booking/Cancel";
             form.submit();

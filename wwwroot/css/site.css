@@ -1,4 +1,4 @@
-html {
+﻿html {
   font-size: 14px;
 }
 
@@ -15,4 +15,52 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+/* Phần tử modal chính */
+.modal {
+    display: none; /* Ẩn modal khi không sử dụng */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+    /* Phần tử tiêu đề */
+    .modal h4 {
+        margin-bottom: 15px;
+        font-size: 18px;
+        color: #333;
+    }
+
+/* Phần tử nút chấp nhận */
+.BtnOk button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .BtnOk button:hover {
+        background-color: #45a049;
+    }
+
+/* Phần tử nút đóng */
+.BtnCancel button {
+    background-color: #f44336;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.BtnClose button:hover {
+    background-color: #d32f2f;
 }

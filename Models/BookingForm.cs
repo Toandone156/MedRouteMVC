@@ -8,6 +8,7 @@ namespace MedRoute.Models
     [Keyless]
     public class BookingForm
     {
+        public string bookingIDStr {  get; set; }
         public int BookingId { get; set; }
         public string FullName { get; set; }
         public DateTime DateOfBirth { get; set; }

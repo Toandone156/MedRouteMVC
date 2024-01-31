@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using MedRoute.Services;
+using System.Net.NetworkInformation;
 
 namespace MedRoute.Controllers
 {
@@ -53,6 +54,24 @@ namespace MedRoute.Controllers
                         FirstOrDefault();
                 }
                 else throw new Exception(bookingRs.Message);
+                // check 
+                var bookingDate = DateOnly.FromDateTime(booking.Date).ToString("yyyy-MM-dd");
+                var dateNow = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
+                if (bookingDate != dateNow)
+                {
+                    bookingRs = await ((BookingRepository)_bookingRepository).CreateAsync(new Booking
+                    {
+                        Date= DateTime.Parse(dateNow),
+                        Order = 0
+                    });;
+                    if (bookingRs.IsSuccess)
+                    {
+                        booking = bookingRs.Data as Booking;
+                    }
+                    else throw new Exception(bookingRs.Message);
+                }
+                
+              
                 // get insurrance if it have
                 if (medicalRecordId > 0)
                 {
@@ -88,20 +107,17 @@ namespace MedRoute.Controllers
             return View();
         }
 
-        private async Task<MedicalRecord> CreateAMedicalRecord(BookingForm bookingForm, 
-            Booking booking, User user)
+        private async Task<MedicalRecord> CreateAMedicalRecord(MedicalRecord medicalRecord)
         {
-            MedicalRecord medicalRecord = null;
-            var medicalRs = await ((MedicalRecordRepository)_medicalRecordRepository).
-                    CreateAsync(new MedicalRecord
-                    {
-                        MedicalDetail = bookingForm.MedicalDetail,
+                        /*MedicalDetail = bookingForm.MedicalDetail,
                         MedicalResult = "",
                         PatientId = user.UserId,
                         BookingId = bookingForm.BookingId,
                         BookingOrder = booking.Order,
-                        Status = ConstVariable.MEDICAL_RECORD_STATUS_WAITING
-                    });
+                        Status = ConstVariable.MEDICAL_RECORD_STATUS_WAITING*/
+            //MedicalRecord medicalRecord = null;
+            var medicalRs = await ((MedicalRecordRepository)_medicalRecordRepository).
+                    CreateAsync(medicalRecord);
             if (medicalRs.IsSuccess)
                 medicalRecord = (medicalRs.Data as MedicalRecord);
             else throw new Exception(medicalRs.Message);
@@ -126,7 +142,80 @@ namespace MedRoute.Controllers
             else throw new Exception(medicalRs.Message);
             return medicalRecord;
         }
+        [HttpPost]
+        public async Task<IActionResult> Book([Bind()] BookingForm bookingForm)
+        {
+            //var u = bookingForm.user.FullName;
+            try
+            {
+                // set cookie
+                var cookieHandler = new CookieService();
+                // declare
+                var bookingID = int.Parse(bookingForm.bookingIDStr);
+                Booking booking = null;
+                // get booking
+                // get booking information      
+                var bookingRs = await ((BookingRepository)_bookingRepository).GetAllAsync();
+                if (bookingRs.IsSuccess)
+                {
+                    booking = (bookingRs.Data as DbSet<Booking>).ToList().
+                        OrderByDescending(b => b.Date).
+                        FirstOrDefault();
+                }
+                else throw new Exception(bookingRs.Message);
+                User user = null;
+                //User user = null;
+                MedicalRecord medicalRecord = null;
+                // get 
+                var userId = Convert.ToInt32(User.FindFirstValue("Id"));
+                if (userId <= 0)
+                {
+                    // create a guest
+                    var userRs = await ((UserRepository)_userRepository).
+                    CreateAsync(new Models.User
+                    {
+                        UserName = "",
+                        FullName = "",
+                        DateOfBirth = bookingForm.DateOfBirth,
+                        Gender = true,
+                        PhoneNumber = "",
+                        Email = "",
+                        InsuranceCode = "",
+                        RoleId = 1
+                    });
+                    if (userRs.IsSuccess)
+                        user = (userRs.Data as User);
+                    else throw new Exception(userRs.Message);
+                    userId = user.UserId;
+                }
+                medicalRecord = await CreateAMedicalRecord(new MedicalRecord()
+                {
+                    MedicalDetail = "",
+                    MedicalResult = "",
+                    PatientId = userId,
+                    BookingId = bookingID,
+                    BookingOrder = booking.Order,
+                    Status = ConstVariable.MEDICAL_RECORD_STATUS_WAITING
+                });
+                // increase
+                booking.Order = booking.Order + 1;
+                 bookingRs = await ((BookingRepository)_bookingRepository).UpdateAsync(booking);
+                if (!bookingRs.IsSuccess)
+                    throw new Exception(bookingRs.Message);
+                // booking successfull
+                TempData["isSucces"] = true;
+                // set cookie
+                cookieHandler.AddCookie(HttpContext, 1, "MedicalRecordId", medicalRecord.MedicalRecordId.ToString());
+            }
+            catch (Exception ex)
+            {
+                TempData["isSucces"] = false;
+                TempData["ErrMess"] = ex.Message;
+            }
+            return RedirectToAction("Index");
 
+        }
+        
         [HttpPost]
         public async Task<IActionResult> BookUser([Bind()] BookingForm bookingForm)
         {
@@ -179,7 +268,21 @@ namespace MedRoute.Controllers
                 }
                 else
                 {
-                    medicalRecord = await CreateAMedicalRecord(bookingForm, booking, user);
+                    /*MedicalDetail = bookingForm.MedicalDetail,
+                        MedicalResult = "",
+                        PatientId = user.UserId,
+                        BookingId = bookingForm.BookingId,
+                        BookingOrder = booking.Order,
+                        Status = ConstVariable.MEDICAL_RECORD_STATUS_WAITING*/
+                    medicalRecord = await CreateAMedicalRecord(new MedicalRecord()
+                    {
+                        MedicalDetail = bookingForm.MedicalDetail,
+                        MedicalResult = "",
+                        PatientId = user.UserId,
+                        BookingId = bookingForm.BookingId,
+                        BookingOrder = booking.Order,
+                        Status = ConstVariable.MEDICAL_RECORD_STATUS_WAITING
+                    });
                     // increase
                     booking.Order = booking.Order + 1;
                     bookingRs = await ((BookingRepository)_bookingRepository).UpdateAsync(booking);
@@ -250,7 +353,15 @@ namespace MedRoute.Controllers
                 }
                 else
                 {
-                    medicalRecord = await CreateAMedicalRecord(bookingForm, booking, user);
+                    medicalRecord = await CreateAMedicalRecord(new MedicalRecord()
+                    {
+                        MedicalDetail = bookingForm.MedicalDetail,
+                        MedicalResult = "",
+                        PatientId = user.UserId,
+                        BookingId = bookingForm.BookingId,
+                        BookingOrder = booking.Order,
+                        Status = ConstVariable.MEDICAL_RECORD_STATUS_WAITING
+                    });
                     // increase
                     booking.Order = booking.Order + 1;
                     bookingRs = await ((BookingRepository)_bookingRepository).UpdateAsync(booking);
@@ -270,6 +381,7 @@ namespace MedRoute.Controllers
             }
             return RedirectToAction("Index");
         }
+        
         [HttpPost]
         public async Task<IActionResult> Cancel()
         {
