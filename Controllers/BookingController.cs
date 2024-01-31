@@ -230,7 +230,17 @@ namespace MedRoute.Controllers
                 MedicalRecord medicalRecord = null;
                 // get 
                 var userId = Convert.ToInt32(User.FindFirstValue("Id"));
+               
                 var medicalRecordId = Convert.ToInt32(cookieHandler.GetCookie(HttpContext, "MedicalRecordId"));
+                // get medicalRecord  
+                var medicalRecordRs= await  ((MedicalRecordRepository)_medicalRecordRepository).GetByIdAsync(medicalRecordId);
+                if (medicalRecordRs.IsSuccess)
+                    medicalRecord = (medicalRecordRs.Data as MedicalRecord);
+                else throw new Exception(medicalRecordRs.Message);
+                // set value user
+                if (userId <= 0) {
+                    userId = medicalRecord.PatientId.Value;
+                }
                 // get a customer
                 var userRs = await ((UserRepository)_userRepository).
                 GetByIdAsync(userId);

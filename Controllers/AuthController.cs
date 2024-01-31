@@ -26,6 +26,7 @@ namespace MedRoute.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Username, Password")] Login login)
         {
+            new CookieService().RemoveCookie(HttpContext, "MedicalRecordId");
             if (ModelState.IsValid)
             {
                 var status = await _authenticateService.ValidateLoginAsync(login);
@@ -40,7 +41,7 @@ namespace MedRoute.Controllers
 
                 TempData["Message"] = status.Message;
             }
-
+            
             return View();
         }
 
@@ -48,7 +49,7 @@ namespace MedRoute.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.LogoutAsync();
-
+            new CookieService().RemoveCookie(HttpContext, "MedicalRecordId");
             return RedirectToAction("Index", "Home");
         }
 
@@ -79,6 +80,7 @@ namespace MedRoute.Controllers
                 return RedirectToAction("Login");
             }
             ModelState.AddModelError(String.Empty, "Some fields was wrong");
+
 
             return View();
         }
