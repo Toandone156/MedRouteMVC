@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using MedRoute.Services;
 using System.Net.NetworkInformation;
+using MedRoute.Models.System;
 
 namespace MedRoute.Controllers
 {
@@ -45,6 +46,7 @@ namespace MedRoute.Controllers
                 Booking booking = null;
                 User user = null;
                 MedicalRecord medicalRecord = null;
+                StatusMessage medicalRecordRs;
                 // get booking information      
                 var bookingRs = await ((BookingRepository)_bookingRepository).GetAllAsync();
                 if (bookingRs.IsSuccess)
@@ -70,12 +72,31 @@ namespace MedRoute.Controllers
                     }
                     else throw new Exception(bookingRs.Message);
                 }
+                // checking 
+                if (medicalRecordId <= 0)
+                {
+                     medicalRecordRs = await ((MedicalRecordRepository)_medicalRecordRepository).GetAllAsync();
+                    if (medicalRecordRs.IsSuccess)
+                    {
+                        medicalRecord = (medicalRecordRs.Data as DbSet<MedicalRecord>).ToList().
+                            Where(p => p.PatientId == userId && p.Status == ConstVariable.MEDICAL_RECORD_STATUS_WAITING && p.BookingId == booking.BookingId).FirstOrDefault();
+                        if(medicalRecord!= null)
+                        {
+                            medicalRecordId = medicalRecord.MedicalRecordId;
+                        }
+                       
+                        cookieHandler.AddCookie(HttpContext, 1, "MedicalRecordId", medicalRecordId.ToString());
+                    }
+                    else throw new Exception(medicalRecordRs.Message);
+                }
                 
-              
+                
+                /* // set user in cookie
+               cookieHandler.AddCookie(HttpContext, 1, "MedicalRecordId", medicalRecord.MedicalRecordId.ToString());*/
                 // get insurrance if it have
                 if (medicalRecordId > 0)
                 {
-                    var medicalRecordRs = await ((MedicalRecordRepository)_medicalRecordRepository).GetByIdAsync(medicalRecordId);
+                    medicalRecordRs = await ((MedicalRecordRepository)_medicalRecordRepository).GetByIdAsync(medicalRecordId);
                     if (medicalRecordRs.IsSuccess)
                     {
                         medicalRecord = medicalRecordRs.Data as MedicalRecord;
