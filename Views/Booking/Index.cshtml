@@ -50,14 +50,14 @@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Họ tên
                                         </label>
-                                        <input name="FullName" id="FullName" type="text" placeholder="Enter full name" required="required" aria-required="true"
+                                        <input name="FullName" id="FullName" type="text" placeholder="Nhập họ và tên" required="required" aria-required="true"
                                                @*  @((user != null) ? "readonly" : "") *@
                                                value="@((user != null) ? user.FullName : "")" />
                                         @* DateOfBirth *@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Năm sinh
                                         </label>
-                                        <input name="DateOfBirth" id="DateOfBirth" type="date" placeholder="Enter birthday" required="required" aria-required="true"
+                                        <input name="DateOfBirth" id="DateOfBirth" type="date" placeholder="Nhập ngày tháng năm sinh" required="required" aria-required="true"
                                                value="@((user != null && user.DateOfBirth.HasValue) ? user.DateOfBirth.Value.ToString("yyyy-MM-dd") : "")" />
 
 
@@ -93,14 +93,14 @@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Số điện thoại
                                         </label>
-                                        <input name="PhoneNumber" type="number" placeholder="Enter phone number" required="required" aria-required="true"
+                                        <input name="PhoneNumber" type="number" placeholder="Nhập số điện thoại" required="required" aria-required="true"
                                                 @* @((user != null) ? "readonly" : "") *@
                                                value="@((user != null) ? user.PhoneNumber : "")" />
                                         @* Email *@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Địa chỉ Email
                                         </label>
-                                        <input name="Email" type="text" placeholder="Enter Email" required="required" aria-required="true"
+                                        <input name="Email" type="text" placeholder="Nhập email" required="required" aria-required="true"
                                                 @* @((user != null) ? "readonly" : "") *@
                                                value="@((user != null) ? user.Email : "")" />
                                         @* UserID *@
@@ -112,14 +112,14 @@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Mã số BHYT (nếu có)
                                         </label>
-                                        <input name="InsuranceCode" type="text" placeholder="Enter BHYT"
+                                        <input name="InsuranceCode" type="text" placeholder="Nhập mã số BHYT"
                                                @*  @((user != null) ? "readonly" : "") *@
                                                value="@((user != null) ? user.InsuranceCode : "")" />
                                         @* MedicalDetail *@
                                         <label for="form-field-name" class="elementor-field-label">
                                             Triệu chứng/Nhu cầu khám (Không bắt buộc)
                                         </label>
-                                        <textarea name="MedicalDetail" placeholder="Enter trieu chung" rows="5"
+                                        <textarea name="MedicalDetail" placeholder="Nhập triệu chứng" rows="5"
                                                   >
                                             @((medicalRecord != null) ? medicalRecord.MedicalDetail : "")
                                               </textarea>
@@ -156,17 +156,19 @@
         </div>
     </div>
 
-    <div id="askForBooking" class="modal">
-        <div class="title" style="height: 30%; background-color: #62d2a2">
-            <h4>Bạn có muốn bốc số luôn không?</h4>
+    <div id="askForBooking" class="modal" style="background-color: #f0f0f0">
+
+        <div class="title" style="background-color: #f0f0f0;text-align: center; margin-bottom">
+            <strong style="font-size: 2rem; ">Bạn có muốn bốc số luôn không?</strong><br />
+            <small style="font-size: 80%; font-weight: bold; color:#f1c40f">Chúng tôi sẽ bốc số thay cho bạn và bạn sẽ không cần phải tốn thời gian điền thông tin</small>
         </div>
-        <div class="container" style="height: 50%; align-items: center">
-            <h4>Chúng tôi sẽ bốc số thay cho bạn và bạn sẽ không cần phải tốn thời gian điền thông tin</h4>
-            <div>Số hiện tại: <strong>@booking.Order</strong></div>
+        <div class="container" style="text-align:center; background-color: #ffffff; margin: 20px 0; padding: 10px 0">     
+            <strong style="position: relative;font-weight: bold; font-size: 1.5rem">Số hiện tại</strong><br />
+            <strong style="min-height:50px;position:relative;font-size:80px;line-height:80px;text-align:center;font-weight:700;padding:20px 15px 0;color:#62d2a2; position: relative;">@booking.Order</strong>
         </div>
-        <div style="height: 20%; display: flex; justify-content: space-around">
+        <div style="display: flex; justify-content: space-around; ">
             <div class="BtnOk">
-                <button onclick="bookRequestPost(@booking.BookingId)">Chấp Nhận</button>
+                <button style="background-color: #65baad" onclick="bookRequestPost(@booking.BookingId)">Chấp Nhận</button>
             </div>
             <div class="BtnCancel" onclick="modalCancel(this)">
                 <button class="closeButton">Close</button>

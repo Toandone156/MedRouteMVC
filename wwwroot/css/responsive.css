@@ -82,3 +82,12 @@
     padding: 10px 10px;
   }
 }
+@media (max-width: 526px) {
+    #askForBooking {
+        width: 90vw;
+    }
+
+    #askForBooking .title strong{
+        font-size: 1.5rem !important;
+    }
+}
